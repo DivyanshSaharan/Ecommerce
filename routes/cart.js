@@ -15,7 +15,7 @@ router.get("/user/cart", isLoggedIn, async (req, res) => {
 });
 
 //payment
-router.post('/checkout/:id', async (req, res) => {
+router.get('/checkout/:id', async (req, res) => {
   let userId = req.params.id;
   let user = await User.findById(userId).populate("cart");
   let totalAmount = user.cart.reduce((sum, curr) => sum + curr.price, 0);
