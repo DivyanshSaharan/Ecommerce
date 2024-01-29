@@ -3,7 +3,7 @@ const { isLoggedIn } = require("../middleware");
 const User = require("../models/User");
 const Product = require("../models/product");
 const router = express.Router();
-const stripe = require('stripe')('sk_test_51OcmQxSFDu1ZCDJRMHu4qcnsgSSJDHOb5rwkq0ZGXzLbVSJNsQkAv8pGYXeBJFSQtJUetLtm8s1SrodzbhqGXqj300O8m1nMoW')
+const stripe = require('stripe')('sk_test_51OcmQxSFDu1ZCDJRMHu4qcnsgSSJDHOb5rwkq0ZGXzLbVSJNsQkAv8pGYXeBJFSQtJUetLtm8s1SrodzbhqGXqj300O8m1nMoW');
 
 router.get("/user/cart", isLoggedIn, async (req, res) => {
   let userId = req.user._id;
