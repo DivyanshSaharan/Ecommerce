@@ -16,6 +16,7 @@ const LocalStrategy = require("passport-local"); //pass
 const User = require("./models/User"); //pass
 const dotenv=require('dotenv').config() //path in config we stored in some other address
 
+
 mongoose.set("strictQuery", true);
 // let url='mongodb+srv://divyanshsaharan2:dskisite159753@divyansh.jt7xmy5.mongodb.net/EcommerceWrites=true&w=majority'
 mongoose
