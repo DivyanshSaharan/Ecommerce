@@ -18,7 +18,6 @@ const dotenv=require('dotenv').config() //path in config we stored in some other
 
 
 mongoose.set("strictQuery", true);
-// let url='mongodb+srv://divyanshsaharan2:dskisite159753@divyansh.jt7xmy5.mongodb.net/EcommerceWrites=true&w=majority'
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
