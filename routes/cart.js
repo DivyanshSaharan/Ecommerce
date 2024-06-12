@@ -18,21 +18,25 @@ router.get("/user/cart", isLoggedIn, async (req, res) => {
 router.get('/checkout/:id', async (req, res) => {
   let userId = req.params.id;
   let user = await User.findById(userId).populate("cart");
-  let totalAmount = user.cart.reduce((sum, curr) => sum + curr.price, 0);
+  // let totalAmount = user.cart.reduce((sum, curr) => sum + curr.price, 0);
+  let cart=[...user.cart]
+  let g=cart.map((items)=>{
+    return items;
+  })
   //   console.log(totalAmount);
   const session = await stripe.checkout.sessions.create({
-    line_items: [
-      {
+    line_items: g.map(item=>{
+      return {
         price_data: {
           currency: 'inr',
           product_data: {
-            name: 'T-shirt',
+            name: item.name,
           },
-          unit_amount: totalAmount*100,
+          unit_amount: (item.price)*100,
         },
         quantity: user.cart.length,
-      },
-    ],
+      }
+    }),
     mode: 'payment',
     success_url: 'http://localhost:4242/success',
     cancel_url: 'http://localhost:4242/cancel',
