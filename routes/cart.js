@@ -34,15 +34,28 @@ router.get('/checkout/:id', async (req, res) => {
           },
           unit_amount: (item.price)*100,
         },
-        quantity: user.cart.length,
+        quantity: 1,
       }
     }),
     mode: 'payment',
-    success_url: 'http://localhost:4242/success',
-    cancel_url: 'http://localhost:4242/cancel',
+    success_url: 'http://localhost:8080/success',
+    cancel_url: 'http://localhost:8080/cancel',
   });
 
   res.redirect(303, session.url);
+});
+router.get('/cancel', isLoggedIn,(req, res) => {
+  // req.flash("info", "Payment Failed");
+  res.redirect('/user/cart');
+});
+
+router.get('/success', isLoggedIn,async(req, res) => {
+  req.flash("success", "Payment Successful");
+  let userId = req.user._id;
+  let user = await User.findById(userId);
+  user.cart=[];
+  await user.save();
+  res.redirect('/user');
 });
 
 router.post("/user/:productId/add", isLoggedIn, async (req, res) => {
