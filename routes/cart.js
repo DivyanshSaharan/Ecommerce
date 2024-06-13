@@ -38,8 +38,8 @@ router.get('/checkout/:id', async (req, res) => {
       }
     }),
     mode: 'payment',
-    success_url: 'http://localhost:8080/success',
-    cancel_url: 'http://localhost:8080/cancel',
+    success_url: `http://${req.headers.host}/success`,
+    cancel_url: `http://${req.headers.host}/cancel`,
   });
 
   res.redirect(303, session.url);
