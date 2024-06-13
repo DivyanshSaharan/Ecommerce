@@ -44,7 +44,7 @@ router.get('/checkout/:id', async (req, res) => {
 
   res.redirect(303, session.url);
 });
-router.get('/cancel', isLoggedIn,(req, res) => {
+router.get('/cancel', isLoggedIn,async(req, res) => {
   // req.flash("info", "Payment Failed");
   res.redirect('/user/cart');
 });
