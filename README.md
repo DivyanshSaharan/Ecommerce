@@ -1,9 +1,9 @@
 
 # Ecommerce Website
 
-• **User-friendly platform:** Simplifies online shopping with an intuitive interface.\n
-• **Secure payment options:** Ensures safe transactions.
-• **Responsive design:** Guarantees easy access and a consistent experience across various devices.
+• **User-friendly platform:** Simplifies online shopping with an intuitive interface.<br>
+• **Secure payment options:** Ensures safe transactions.<br>
+• **Responsive design:** Guarantees easy access and a consistent experience across various devices.<br>
 • **Dual marketplace functionality:** Enables sellers to list products and buyers to make purchases, fostering a dynamic commercial 
 environment
 
