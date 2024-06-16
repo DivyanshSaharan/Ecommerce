@@ -1,7 +1,11 @@
 
 # Ecommerce Website
 
-This ecommerce website offers a user-friendly platform for convenient online shopping. With a diverse range of products and secure payment option, it provides a seamless shopping experience. The responsive design ensures accessibility across devices.
+• **User-friendly platform:** Simplifies online shopping with an intuitive interface.
+• **Secure payment options:** Ensures safe transactions.
+• **Responsive design:** Guarantees easy access and a consistent experience across various devices.
+• **Dual marketplace functionality:** Enables sellers to list products and buyers to make purchases, fostering a dynamic commercial 
+environment
 
 
 ## Tech Stack
