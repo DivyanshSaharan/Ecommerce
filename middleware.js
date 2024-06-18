@@ -55,9 +55,10 @@ const isSeller = (req,res,next)=>{
 const isProductAuthor = async(req,res,next)=>{
     let {id} = req.params;
     let product = await Product.findById(id);
-    console.log(product.author , 'author'); //objectid
-    console.log(req.user , 'user'); //objectid
-    if(!product.author.equals(req.user._id)){
+    console.log(product.author , 'author');
+    console.log(req.user , 'user'); 
+
+    if(!product || !product.author || !product.author.equals(req.user._id)){
         req.flash('error' , 'You are not the owner of this product');
         return res.redirect(`/products/${id}`)
     }

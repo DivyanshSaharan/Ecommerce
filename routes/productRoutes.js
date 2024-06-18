@@ -4,6 +4,7 @@ const Product = require('../models/product');
 const router = express.Router();
 const {validateProduct , isLoggedIn, isSeller, isProductAuthor} =  require('../middleware');
 const Review = require('../models/review');
+const stripe = require('stripe')('sk_test_51OcmQxSFDu1ZCDJRMHu4qcnsgSSJDHOb5rwkq0ZGXzLbVSJNsQkAv8pGYXeBJFSQtJUetLtm8s1SrodzbhqGXqj300O8m1nMoW');
 
 // displaying all the products
 router.get('/products' , async(req,res)=>{
@@ -60,7 +61,7 @@ router.get('/products/:id' , isLoggedIn , async(req,res)=>{
 })
 
 // route for editing the product so we need form for it
-router.get('/products/:id/edit' , isLoggedIn , isSeller , async(req,res)=>{
+router.get('/products/:id/edit' , isLoggedIn , isSeller ,isProductAuthor, async(req,res)=>{
     try{
 
         let {id} = req.params;
@@ -72,6 +73,44 @@ router.get('/products/:id/edit' , isLoggedIn , isSeller , async(req,res)=>{
         res.status(500).render('error' , {err:e.message});
     }
 })
+
+//Direct buying the Product
+router.get('/products/:id/buy' , async(req,res)=>{
+    // let userId = req.params.id;
+    // let user = await User.findById(userId).populate("cart");
+    // let totalAmount = user.cart.reduce((sum, curr) => sum + curr.price, 0);
+    // let cart=[...user.cart]
+    // let g=cart.map((items)=>{
+    //   return items;
+    // })
+    //   console.log(totalAmount);
+    let {id} = req.params;
+    let foundProduct = await Product.findById(id);
+    const session = await stripe.checkout.sessions.create({
+        line_items: [
+          {
+            price_data: {
+              currency: 'inr',
+              product_data: {
+                name: foundProduct.name,
+              },
+              unit_amount: foundProduct.price*100,
+            },
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+      success_url: `http://${req.headers.host}/success`,
+      cancel_url: `http://${req.headers.host}/ProductCancel/${id}`,
+    });
+    res.redirect(303, session.url);
+});
+
+router.get('/ProductCancel/:id', isLoggedIn,async(req, res) => {
+    // req.flash("info", "Payment Failed");
+    let {id} = req.params;
+    res.redirect(`/products/${id}`);
+});
 
 // changing the original edits in the database made in the editform 
 router.patch('/products/:id',isLoggedIn , isSeller, isProductAuthor, validateProduct, async(req,res)=>{
