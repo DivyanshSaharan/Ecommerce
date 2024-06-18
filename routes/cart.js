@@ -68,4 +68,25 @@ router.post("/user/:productId/add", isLoggedIn, async (req, res) => {
   res.redirect("/user/cart");
 });
 
+router.delete('/user/:productId', isLoggedIn, async(req, res) => {
+  let { productId } = req.params;
+  let userId = req.user._id;
+  let user = await User.findById(userId);
+  
+  // Find the index of the product in the cart
+  let productIndex = user.cart.indexOf(productId);
+  
+  // If the product is in the cart, remove it
+  if(productIndex > -1) {
+      user.cart.splice(productIndex, 1);
+      await user.save();
+      req.flash('success', 'Product deleted successfully');
+  } else {
+      req.flash('error', 'Product not found in cart');
+  }
+  
+  res.redirect('/user/cart');
+});
+
+
 module.exports = router;
