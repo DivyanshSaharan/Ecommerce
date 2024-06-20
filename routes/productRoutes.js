@@ -43,7 +43,7 @@ router.post('/products' ,isLoggedIn , isSeller ,  validateProduct , async (req,r
     }
 })
 
-// route for shwoing the deatails of thre products
+// route for showing the details of thre products
 router.get('/products/:id' , isLoggedIn , async(req,res)=>{
     try{
 
@@ -149,6 +149,24 @@ router.delete('/products/:id' , isLoggedIn, isSeller , isProductAuthor , async(r
     }
 })
 
+router.delete('/products/review/:id' , isLoggedIn, isSeller ,isProductAuthor, async(req,res)=>{
+    try{
+
+        let {id} = req.params;
+        const product = await Product.findById(id);
+        
+        for(let id of product.reviews){
+            await Review.findByIdAndDelete(id);
+        }
+
+        req.flash('success' , 'Comment deleted successfully');
+        res.redirect(`/products/${id}`);
+    }
+
+    catch(e){
+        res.status(500).render('error' , {err:e.message});
+    }
+})
 
 
 module.exports = router;

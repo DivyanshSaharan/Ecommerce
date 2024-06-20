@@ -94,7 +94,13 @@
           <%if(review.createdAt){%>
           <p class="text-muted"><%=review.createdAt.toDateString()%></p>
           <%}%>
-          <button class="btn btn-danger">Delete</button>
+          <form
+          class="d-inline-block"
+          action="/products/review/<%=foundProduct._id%>?_method=DELETE"
+          method="POST"
+        >
+          <button class="btn btn-danger btn-sm">Delete</button>
+        </form>
         </div>
       </div>
 
