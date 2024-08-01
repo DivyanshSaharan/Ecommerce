@@ -149,24 +149,19 @@ router.delete('/products/:id' , isLoggedIn, isSeller , isProductAuthor , async(r
     }
 })
 
-router.delete('/products/review/:id' , isLoggedIn, isSeller ,isProductAuthor, async(req,res)=>{
-    try{
-
-        let {id} = req.params;
-        const product = await Product.findById(id);
-        
-        for(let id of product.reviews){
-            await Review.findByIdAndDelete(id);
-        }
-
-        req.flash('success' , 'Comment deleted successfully');
-        res.redirect(`/products/${id}`);
+router.delete('/products/review/:id/review/:reviewId', isLoggedIn, isSeller, isProductAuthor, async (req, res) => {
+    try {
+      const { id, reviewId } = req.params;
+      await Product.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+      await Review.findByIdAndDelete(reviewId);
+  
+      req.flash('success', 'Comment deleted successfully');
+      res.redirect(`/products/${id}`);
+    } catch (e) {
+      res.status(500).render('error', { err: e.message });
     }
-
-    catch(e){
-        res.status(500).render('error' , {err:e.message});
-    }
-})
+  });
+  
 
 
 module.exports = router;

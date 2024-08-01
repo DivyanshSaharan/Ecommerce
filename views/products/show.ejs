@@ -82,30 +82,27 @@
 
     <div class="my-3">
       <% for(let review of foundProduct.reviews){ %>
-
       <div class="card mb-3">
-        <!-- <div class="card-header">Rating: <%=review.rating%></div> -->
         <div class="card-body">
           <p class="starability-result" data-rating="<%=review.rating%>">
             Rated: <%=review.rating%> stars
           </p>
-          <!-- <h5 class="card-title">Special title treatment</h5> -->
           <p class="card-text">Comment: <%=review.comment%></p>
           <%if(review.createdAt){%>
           <p class="text-muted"><%=review.createdAt.toDateString()%></p>
           <%}%>
           <form
-          class="d-inline-block"
-          action="/products/review/<%=foundProduct._id%>?_method=DELETE"
-          method="POST"
-        >
-          <button class="btn btn-danger btn-sm">Delete</button>
-        </form>
+            class="d-inline-block"
+            action="/products/review/<%=foundProduct._id%>/review/<%=review._id%>?_method=DELETE"
+            method="POST"
+          >
+            <button class="btn btn-danger btn-sm">Delete</button>
+          </form>
         </div>
       </div>
-
       <% } %>
     </div>
+   
   </div>
 </div>
 
