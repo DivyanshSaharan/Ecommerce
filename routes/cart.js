@@ -5,13 +5,15 @@ const Product = require("../models/product");
 const router = express.Router();
 const stripe = require('stripe')('sk_test_51OcmQxSFDu1ZCDJRMHu4qcnsgSSJDHOb5rwkq0ZGXzLbVSJNsQkAv8pGYXeBJFSQtJUetLtm8s1SrodzbhqGXqj300O8m1nMoW');
 
+// showing cart elements
 router.get("/user/cart", isLoggedIn, async (req, res) => {
   let userId = req.user._id;
   let user = await User.findById(userId).populate("cart.product");
   let totalAmount = user.cart.reduce((sum, curr) => sum + curr.product.price * curr.quantity, 0);
-  res.render("cart/cart", { user, totalAmount });
+  res.render("cart/cart", { user, totalAmount });// send to cart.ejs
 });
 
+// api to update total amount
 router.get("/user/cart/totalAmount", isLoggedIn, async (req, res) => {
   const userId = req.user._id;
 
@@ -45,7 +47,6 @@ router.get('/checkout/:id', async (req, res) => {
   let userId = req.params.id;
   let user = await User.findById(userId).populate("cart.product");
   
-  // Ensure user.cart is populated correctly with product details and updated quantities
   const session = await stripe.checkout.sessions.create({
     line_items: user.cart.map(item => ({
       price_data: {
@@ -55,7 +56,7 @@ router.get('/checkout/:id', async (req, res) => {
         },
         unit_amount: item.product.price * 100,
       },
-      quantity: item.quantity, // Ensure correct quantity is passed
+      quantity: item.quantity,
     })),
     mode: 'payment',
     success_url: `http://${req.headers.host}/success`,
@@ -66,6 +67,7 @@ router.get('/checkout/:id', async (req, res) => {
 });
 
 router.get('/cancel', isLoggedIn, async (req, res) => {
+  req.flash("error", "Payment failed");
   res.redirect('/user/cart');
 });
 
@@ -78,6 +80,7 @@ router.get('/success', isLoggedIn, async (req, res) => {
   res.redirect('/user');
 });
 
+//Add product to cart
 router.post("/user/:productId/add", isLoggedIn, async (req, res) => {
   let { productId } = req.params;
   let userId = req.user._id;
@@ -93,6 +96,7 @@ router.post("/user/:productId/add", isLoggedIn, async (req, res) => {
   res.redirect("/user/cart");
 });
 
+// Increase quantity ( + ) API
 router.post("/user/:productId/increment", isLoggedIn, async (req, res) => {
   const { productId } = req.params;
   const userId = req.user._id;
@@ -114,6 +118,7 @@ router.post("/user/:productId/increment", isLoggedIn, async (req, res) => {
   }
 });
 
+//decrease quantity ( - ) (API)
 router.post("/user/:productId/decrement", isLoggedIn, async (req, res) => {
   const { productId } = req.params;
   const userId = req.user._id;

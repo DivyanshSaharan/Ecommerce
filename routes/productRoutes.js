@@ -19,7 +19,7 @@ router.get('/products' , async(req,res)=>{
 })
 
 
-// adding a fomr for  anew product
+// adding a form for new product
 router.get('/products/new' , isLoggedIn ,isSeller , (req,res)=>{
     try{
         res.render('products/new');
@@ -43,7 +43,7 @@ router.post('/products' ,isLoggedIn , isSeller ,  validateProduct , async (req,r
     }
 })
 
-// route for showing the details of thre products
+// route for showing the details of the products
 router.get('/products/:id' , isLoggedIn , async(req,res)=>{
     try{
 
@@ -112,7 +112,7 @@ router.get('/ProductCancel/:id', isLoggedIn,async(req, res) => {
     res.redirect(`/products/${id}`);
 });
 
-// changing the original edits in the database made in the editform 
+// changing the original edits in the database made in the edit form 
 router.patch('/products/:id',isLoggedIn , isSeller, isProductAuthor, validateProduct, async(req,res)=>{
     try{
 

@@ -25,7 +25,7 @@ async function likeButton(productId , btn){
         if(e.response.status === 401){
 
             window.location.replace('/login');
-            console.log(e.message , 'error hai ye window vaali line ka')
+            console.log(e.message , 'There is an error')
         }
     }
 }

@@ -8,17 +8,25 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  let { username, password, email, role, gender } = req.body;
-  let user = new User({ username, email, gender, role });
-  let newUser = await User.register(user, password);
-  // res.send(newUser);
-  res.redirect("/login");
+  const { username, password, email, role, gender } = req.body;
+  const user = new User({ username, email, gender, role });
+
+  try {
+      const newUser = await User.register(user, password); //creating new user in database using passport( match: username)
+      req.flash("success", "Registration successful! You can now log in.");
+      res.redirect("/login");
+  } catch (err) {
+      req.flash("error", "User already exists. Please choose a different username.");
+      res.redirect("/register");
+  }
 });
+
 
 router.get("/login", (req, res) => {
   res.render("auth/login");
 });
 
+//Authentication of user
 router.post(
   "/login",
   passport.authenticate("local", {

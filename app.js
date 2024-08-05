@@ -52,13 +52,13 @@ app.use(session(configSession));
 app.use(flash());
 
 // use static serialize and deserialize of model for passport session support
-app.use(passport.initialize()); //pass
-app.use(passport.session()); //pass
-passport.serializeUser(User.serializeUser()); //pass
-passport.deserializeUser(User.deserializeUser()); //pass
+app.use(passport.initialize()); //Sets up password to handle auth requests
+app.use(passport.session()); //intializes session support for auth
 
-// use static authenticate method of model in LocalStrategy
-passport.use(new LocalStrategy(User.authenticate())); //pass
+// use static authenticate method of model in LocalStrategy(They are directly applied to the model)
+passport.serializeUser(User.serializeUser()); // provided by passport-local-mongoose
+passport.deserializeUser(User.deserializeUser());
+passport.use(new LocalStrategy(User.authenticate())); 
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
